@@ -1,0 +1,72 @@
+#(1)Any line begining with # in a comment
+#(2)System Creation of FCC of Argon lattice
+#(3)Any line ending with & means the command continue in the next line
+
+units metal  #<what are the units you will use to specify various thing in the input file>
+
+boundary p p p #<Specify periodic boundary condition are needed in all three faces of simulation box>
+atom_style atomic #<what type of atoms is to be used in the simulation>
+
+log logfile.txt #<Write the log file to this text file.All thermodynamic information applicable to the entire system>
+
+variable stp equal 100 #<Defining a variable 'stp' whose value is equal to 100>
+
+print "The number of steps I will run is ${stp}" #Printing this variable in some manner
+
+region forbox block 0 45.8 0 45.8 0 45.8 units box
+#<Refers to an abstract geometric region of space.Unit boxes refers to the fact that the size of the box is specified in the units as given in the units command. The name 'forbox' refers to the region ID so that you can refer to it somewhere else in the input script>
+
+create_box 1 forbox #<Create the box>
+
+#<Create lattice where 4.58 is argument for lattice constant or scaled. The other value a1 , a2 , a3 are three latice vectors; This is followed by basis corresponding to each lattice>
+lattice custom 4.58 a1 1.0 0.0 0.0 a2 0.0 1.0 0.0 a3 0.0 0.0 1.0 &
+		    basis 0.0 0.0 0.0 &
+		    basis 0.5 0.5 0.0 &
+		    basis 0.0 0.5 0.5 &
+		    basis 0.5 0.0 0.5
+
+create_atoms 1 region forbox basis 1 1 basis 2 1 basis 3 1 basis 4 1 units box #Put the atom in the box
+
+mass 1 39.948 #<Mass of atom type 1 is 39.48 [mass units grams/mole]
+
+pair_style lj/cut 10 #kB = 8.61733033e-5 eV/K #<How atoms are interacting. Provide the name of potential and the corresponding cut-off distance>
+
+pair_coeff 1 1 0.01006418 3.3952 #<The coefficient of lj potential for the interaction of atom type 1 with 1>
+
+group ar type 1 #<Group all the argon types. All atoms of type 1 are in group refered as name 'ar'>
+
+minimize 1e-7 1e-9 10000 10000 #<Minimize the energy using a conjugate gradient step>
+
+print "Finish Minimizing"
+
+velocity all create 300 198728 dist gaussian
+#Set the velocities of all the atoms so that the temperature 
+
+timestep 0.001
+fix 1 all nve
+dump dump_1 all custom 20 dumpnve.min id type x y z ix iy iz vx vy
+#<Dump all the atoms into the dumpnve.min every time step>
+thermo 20
+run 3000
+undump dump_1
+unfix 1
+
+#Let us now change the temperature and pressure slowly using NPT
+
+fix 2 all npt temp 150 300 0.1 iso 70000 1.0 1.0
+thermo_style custom step time cpu temp pe ke etotal press vol
+#<Print the thermodynamic information>
+thermo 20
+dump dump_1 all custom 20 dumpnve.min id type x y z ix iy iz vx vy vz  #<Dump all the atoms to the file dump.min>
+run 10000
+unfix 2
+
+#Checking the pressure/temp it has reached using the NVE ensemble
+
+fix 2 all nve
+run 5000
+unfix 2
+
+
+
+

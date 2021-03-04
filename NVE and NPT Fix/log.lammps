@@ -1,0 +1,13 @@
+LAMMPS (29 Oct 2020)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:94)
+  using 1 OpenMP thread(s) per MPI task
+#(1)Any line begining with # in a comment
+#(2)System Creation of FCC of Argon lattice
+#(3)Any line ending with & means the command continue in the next line
+
+units metal  #<what are the units you will use to specify various thing in the input file>
+
+boundary p p p #<Specify periodic boundary condition are needed in all three faces of simulation box>
+atom_style atomic #<what type of atoms is to be used in the simulation>
+
+log logfile.txt #<Write the log file to this text file.All thermodynamic information applicable to the entire system>
