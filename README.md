@@ -1,6 +1,6 @@
-# Molecular-Dynamic-Simulation-LAMMPS
+# Molecular-Dynamics-Simulation-LAMMPS
 
-Performed molecular dynamic simulation of Argon particles in FCC arrangement using LAMMPS(Large-scale Atomic/Molecular Massively Parallel Simulator). While preparing the input scripts, experimented with various inter-atomic potentials such as Lennard-Jones potential. Also, applied multiple operations on the system and visualized it using OVITO. 
+Performed molecular dynamics simulation of Argon particles in FCC arrangement using LAMMPS(Large-scale Atomic/Molecular Massively Parallel Simulator). While preparing the input scripts, experimented with various inter-atomic potentials such as Lennard-Jones potential. Also, applied multiple operations on the system and visualized it using OVITO. 
 
 ### Programs/Tools Used:
 
